@@ -4,7 +4,7 @@ import 'screens/starting_page.dart';
 
 final kColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
-  seedColor: const Color.fromARGB(255, 75, 37, 37),
+  seedColor: const Color.fromARGB(255, 43, 39, 39),
 );
 
 final kTheme = ThemeData.dark().copyWith(
