@@ -13,11 +13,11 @@ class StartingPage extends StatelessWidget {
       appBar: AppBar(
         title: Text(title),
       ),
-      body: FutureBuilder(
-        future: ApiServices.getNowPlaying(),
-        builder: (context, AsyncSnapshot snapshot) {
-          return const Center(child: CircularProgressIndicator());
-        },
+      body: Center(
+        child: ElevatedButton(
+          onPressed: ApiServices.register,
+          child: const Text("Register"),
+        ),
       ),
     );
   }
