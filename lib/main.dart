@@ -27,7 +27,7 @@ final kTheme = ThemeData.dark().copyWith(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  await Hive.openBox('sessionBox');
+  await Hive.openBox('authBox');
   runApp(const MyApp());
 }
 
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var box = Hive.box('sessionBox');
+    var box = Hive.box('authBox');
     bool isLoggedIn = box.get('session_id') != null;
 
     return MaterialApp(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/screens/login_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/buttons.dart';
 import 'package:movie_app/widgets/fullscreen_carousel.dart';
@@ -41,7 +41,12 @@ class StartingPage extends StatelessWidget {
                     const SizedBox(height: 100),
                     AuthButton(
                       "Login",
-                      onPressed: () => ApiServices.getNowPlaying(1),
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const LoginScreen(),
+                        ),
+                      ),
                       icon: Icons.person,
                     ),
                     const SizedBox(height: 15),
