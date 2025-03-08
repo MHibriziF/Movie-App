@@ -1,21 +1,25 @@
 class Movie {
+  final int id;
   final String title;
   final String backDropPath;
 
   Movie({
+    required this.id,
     required this.title,
     required this.backDropPath,
   });
 
-  factory Movie.fromMap(Map<String, dynamic> map) {
+  factory Movie.fromJson(Map<String, dynamic> map) {
     return Movie(
+      id: map['id'],
       title: map['title'],
       backDropPath: map['backdrop_path'],
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'title': title,
       'backDropPath': backDropPath,
     };
