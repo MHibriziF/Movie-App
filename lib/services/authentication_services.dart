@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../env.dart';
 import 'package:http/http.dart' as http;
 import 'package:movie_app/models/request_token.dart';
+import 'package:hive/hive.dart';
 
 class Authentication {
   static void register() async {
@@ -64,7 +65,16 @@ class Authentication {
 
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
-      return data['success'] ? data['session_id'] : null;
+      if (data['success']) {
+        String sessionId = data['session_id'];
+
+        // Store session ID in Hive
+        var box = Hive.box('sessionBox');
+        await box.put('session_id', sessionId);
+
+        return sessionId;
+      }
+      return "Fail";
     } else {
       throw Exception("Failed to load data");
     }
@@ -81,6 +91,14 @@ class Authentication {
     );
     final response = await http.delete(uri);
     final data = json.decode(response.body);
-    return data['success'] ?? false;
+
+    if (data['success']) {
+      // Delete session ID in Hive
+      var box = Hive.box('sessionBox');
+      await box.delete('session_id');
+      return data['success'];
+    }
+
+    return false;
   }
 }

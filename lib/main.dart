@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movie_app/screens/homepage_screen.dart';
 import 'screens/starting_page.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 final kColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
@@ -22,7 +24,10 @@ final kTheme = ThemeData.dark().copyWith(
   ),
 );
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  await Hive.openBox('sessionBox');
   runApp(const MyApp());
 }
 
@@ -31,10 +36,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var box = Hive.box('sessionBox');
+    bool isLoggedIn = box.get('session_id') != null;
+
     return MaterialApp(
       title: 'Movie App',
       theme: kTheme,
-      home: const StartingPage(title: 'Starting Page'),
+      home: isLoggedIn
+          ? const HomePage(title: "Tes")
+          : const StartingPage(title: "StartingPage"),
     );
   }
 }

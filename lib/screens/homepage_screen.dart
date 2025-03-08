@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:carousel_slider/carousel_slider.dart';
-import 'package:movie_app/services/api_services.dart';
+// import 'package:movie_app/services/api_services.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key, required this.title});
@@ -17,6 +17,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+      ),
+      body: Center(
+        child: Text("Hi"),
       ),
       // body: FutureBuilder(
       //   future: ApiServices.getNowPlaying(1),
