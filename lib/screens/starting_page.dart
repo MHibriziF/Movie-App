@@ -3,6 +3,7 @@ import 'package:movie_app/screens/login_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/buttons.dart';
 import 'package:movie_app/widgets/fullscreen_carousel.dart';
+import 'package:movie_app/widgets/popup.dart';
 
 class StartingPage extends StatelessWidget {
   const StartingPage({super.key, required this.title});
@@ -52,7 +53,18 @@ class StartingPage extends StatelessWidget {
                     const SizedBox(height: 15),
                     AuthButton(
                       "Register",
-                      onPressed: Authentication.register,
+                      onPressed: () => showDialog(
+                        context: context,
+                        builder: (context) => Popup(
+                          title: "Redirecting to TMDB Registration",
+                          content:
+                              "TMDB does not allow users to register through third-party apps. You will be redirected to their registration page—please return here once you have completed the process",
+                          onOk: () {
+                            Navigator.pop(context);
+                            Authentication.register();
+                          },
+                        ),
+                      ),
                       icon: Icons.person_2_outlined,
                     ),
                   ],

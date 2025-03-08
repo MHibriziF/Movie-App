@@ -5,10 +5,12 @@ class Popup extends StatelessWidget {
     super.key,
     required this.title,
     required this.content,
+    required this.onOk,
   });
 
   final String title;
   final String content;
+  final void Function()? onOk;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class Popup extends StatelessWidget {
       ),
       actions: [
         TextButton(
-          onPressed: () => Navigator.pop(context),
+          onPressed: onOk,
           child: const Text("OK"),
         ),
       ],

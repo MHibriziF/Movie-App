@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/screens/homepage_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/popup.dart';
 
@@ -39,9 +40,18 @@ class _LoginScreenState extends State<LoginScreen> {
         'password': password,
         'request_token': request.requestToken,
       });
-      await Authentication.createSession({
+      var session = await Authentication.createSession({
         'request_token': response.requestToken,
       });
+      print(session);
+      if (context.mounted) {
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => HomePage(title: "Homepage"),
+          ),
+          (route) => false,
+        );
+      }
     } catch (e) {
       // Invalid credentials
       if (context.mounted) {
@@ -50,6 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
           builder: (context) => Popup(
             title: "Invalid Username and/or Password",
             content: "Please re-enter your credentials",
+            onOk: () => Navigator.pop(context),
           ),
         );
       }
