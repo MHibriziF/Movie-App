@@ -68,6 +68,14 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
+                Text(
+                  "Sign in with TMDB",
+                  style: Theme.of(context).textTheme.headlineLarge!.copyWith(
+                        color:
+                            Theme.of(context).colorScheme.onSecondaryContainer,
+                      ),
+                ),
+                SizedBox(height: 50),
                 TextFormField(
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
@@ -100,6 +108,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: submitLogin,
+                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
+                        minimumSize: WidgetStateProperty.all(
+                          const Size(double.infinity, 50),
+                        ),
+                      ),
                   child: const Text("Login"),
                 ),
               ],
