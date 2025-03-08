@@ -14,6 +14,23 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  void submitLogin() {
+    if (_formKey.currentState!.validate()) {
+      login(
+        context,
+        _usernameController.text,
+        _passwordController.text,
+      );
+    }
+  }
+
+  String? nullValidator(String? value, String message) {
+    if (value == null || value.isEmpty) {
+      return message;
+    }
+    return null;
+  }
+
   void login(BuildContext context, String username, String password) async {
     final request = await Authentication.getRequestToken();
     try {
@@ -42,59 +59,51 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    labelText: "Username",
+                    hintText: "Enter your TMDB username",
+                  ),
+                  validator: (value) => nullValidator(
+                    value,
+                    'Please enter your username',
+                  ),
                 ),
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: "Username",
-                  hintText: "Enter your TMDB username",
+                TextFormField(
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: "Password",
+                    hintText: "Enter your TMDB password",
+                  ),
+                  obscureText: true,
+                  validator: (value) => nullValidator(
+                    value,
+                    'Please enter your password',
+                  ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your username';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.secondary,
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: submitLogin,
+                  child: const Text("Login"),
                 ),
-                controller: _passwordController,
-                decoration: const InputDecoration(
-                  labelText: "Password",
-                  hintText: "Enter your TMDB password",
-                ),
-                obscureText: true,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter your password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    login(
-                      context,
-                      _usernameController.text,
-                      _passwordController.text,
-                    );
-                  }
-                },
-                child: const Text("Login"),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
