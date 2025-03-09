@@ -22,22 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
     };
   }
 
-  Widget movieCategoryLabel(String category, bool isBiggest) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10),
-      child: Text(
-        category,
-        style: isBiggest
-            ? Theme.of(context).textTheme.bodyLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                )
-            : Theme.of(context).textTheme.bodyMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,14 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
             return ListView(
               children: [
                 const SizedBox(height: 10),
-                movieCategoryLabel('Now Playing', true),
+                MovieCategoryLabel(
+                  'Now Playing',
+                  isBiggest: true,
+                ),
                 const SizedBox(height: 10),
                 RowCarousel(
                   movieList: snapshot.data!['nowPlaying']!,
                   percent: 0.3,
                 ),
                 const SizedBox(height: 10),
-                movieCategoryLabel('Top Rated', false),
+                MovieCategoryLabel('Top Rated'),
                 const SizedBox(height: 10),
                 RowCarousel(
                   movieList: snapshot.data!['topRated']!,
@@ -79,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   viewportFraction: 0.6,
                 ),
                 const SizedBox(height: 10),
-                movieCategoryLabel('Popular', false),
+                MovieCategoryLabel('Popular'),
                 const SizedBox(height: 10),
                 RowCarousel(
                   movieList: snapshot.data!['popular']!,
@@ -91,6 +78,34 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class MovieCategoryLabel extends StatelessWidget {
+  const MovieCategoryLabel(
+    this.category, {
+    super.key,
+    this.isBiggest = false,
+  });
+
+  final String category;
+  final bool isBiggest;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Text(
+        category,
+        style: isBiggest
+            ? Theme.of(context).textTheme.bodyLarge!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                )
+            : Theme.of(context).textTheme.bodyMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer,
+                ),
       ),
     );
   }
