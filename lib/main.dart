@@ -11,7 +11,11 @@ final kColorScheme = ColorScheme.fromSeed(
 
 final kTheme = ThemeData.dark().copyWith(
   colorScheme: kColorScheme,
-  textTheme: GoogleFonts.latoTextTheme(),
+  textTheme: GoogleFonts.latoTextTheme().copyWith(
+    bodyMedium: TextStyle(
+      color: kColorScheme.onPrimaryContainer,
+    ),
+  ),
   appBarTheme: const AppBarTheme().copyWith(
     backgroundColor: kColorScheme.onPrimaryContainer,
     foregroundColor: kColorScheme.primaryContainer,

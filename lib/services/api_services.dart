@@ -7,7 +7,6 @@ class ApiServices {
   static List<Movie> convertResponseToMovieList(http.Response response) {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body)['results'];
-
       List<Movie> movies = [];
       for (final movie in data) {
         try {
@@ -15,9 +14,6 @@ class ApiServices {
         } catch (e) {
           continue;
         }
-      }
-      for (final movie in movies) {
-        print(movie.title);
       }
       return movies;
     } else {
