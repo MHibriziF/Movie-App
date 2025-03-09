@@ -129,4 +129,40 @@ class ApiServices {
     final response = await http.get(uri);
     return convertResponseToMovieList(response);
   }
+
+  static Future<int> updateWatchlist(Map<String, dynamic> requestBody) async {
+    var box = Hive.box('authBox');
+
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/account/1/watchlist",
+      {
+        'api_key': Env.apiKey,
+        'session_id': box.get('session_id'),
+      },
+    );
+
+    final response = await http.post(
+      uri,
+      body: json.encode(requestBody),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    return response.statusCode;
+  }
+
+  static Future<List<Movie>> getWatchList() async {
+    var box = Hive.box('authBox');
+
+    final uri = Uri.https(
+      Env.baseUrl,
+      '/3/account/1/watchlist/movies',
+      {
+        'api_key': Env.apiKey,
+        'session_id': box.get('session_id'),
+      },
+    );
+    final response = await http.get(uri);
+    return convertResponseToMovieList(response);
+  }
 }

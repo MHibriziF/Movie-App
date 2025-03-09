@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:movie_app/models/account.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/services/api_services.dart';
 import 'package:movie_app/widgets/left_drawer.dart';
@@ -21,6 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final List<Movie> favoriteMovies = await ApiServices.getFavorites();
     for (var movie in favoriteMovies) {
       favBox.put(movie.id, true);
+    }
+
+    final List<Movie> watchlist = await ApiServices.getWatchList();
+    for (var movie in watchlist) {
+      watchBox.put(movie.id, true);
     }
   }
 

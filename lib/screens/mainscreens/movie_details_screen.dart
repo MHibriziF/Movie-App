@@ -3,7 +3,6 @@ import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_details.dart';
 import 'package:movie_app/services/api_services.dart';
-import 'package:movie_app/widgets/popup.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({super.key, required this.movie});
@@ -16,6 +15,36 @@ class MovieDetailsScreen extends StatefulWidget {
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
   bool isFavorite = false;
   bool isWatchlist = false;
+
+  void handleWatchlist(bool isWatchlist) async {
+    if (!isWatchlist) {
+      int responseCode = await ApiServices.updateWatchlist({
+        "media_type": "movie",
+        "media_id": widget.movie.id,
+        "watchlist": true,
+      });
+      if (responseCode == 201) {
+        var watchBox = Hive.box('watchlistBox');
+        watchBox.put(widget.movie.id, true);
+        setState(() {
+          isWatchlist = watchBox.get(widget.movie.id) != null;
+        });
+      }
+    } else {
+      int responseCode = await ApiServices.updateWatchlist({
+        "media_type": "movie",
+        "media_id": widget.movie.id,
+        "watchlist": false,
+      });
+      if (responseCode == 200) {
+        var watchBox = Hive.box('watchlistBox');
+        watchBox.delete(widget.movie.id);
+        setState(() {
+          isWatchlist = watchBox.get(widget.movie.id) != null;
+        });
+      }
+    }
+  }
 
   void handleFavorites(bool isFavorite) async {
     if (!isFavorite) {
@@ -46,8 +75,6 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       }
     }
   }
-
-  void addWatchlist() {}
 
   @override
   Widget build(BuildContext context) {
@@ -96,26 +123,28 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        Text(
+                          movie.title,
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
                         Row(
                           children: [
-                            Text(
-                              movie.title,
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            MovieRatings(movie: movie),
                             const Spacer(),
                             CircleAvatar(
                               child: IconButton(
-                                onPressed: () {},
-                                icon: Icon(Icons.movie_creation_sharp),
+                                onPressed: () => handleWatchlist(isWatchlist),
+                                icon: isWatchlist
+                                    ? Icon(Icons.movie_creation_sharp)
+                                    : Icon(Icons.movie_creation_outlined),
                               ),
-                            )
+                            ),
                           ],
                         ),
-                        const SizedBox(height: 10),
-                        MovieRatings(movie: movie),
                         const SizedBox(height: 15),
                         Text(
                           "Genres:",

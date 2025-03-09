@@ -129,9 +129,14 @@ class Authentication {
     final data = json.decode(response.body);
 
     if (data['success']) {
-      // Delete session ID in Hive
+      // Delete session ID and other user datas in Hive
       var box = Hive.box('authBox');
+      var favBox = Hive.box('favoritesBox');
+      var watchlistBox = Hive.box('watchlistBox');
       await box.delete('session_id');
+      await favBox.clear();
+      await watchlistBox.clear();
+
       return data['success'];
     }
 
