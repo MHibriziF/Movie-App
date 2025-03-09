@@ -17,8 +17,8 @@ final kTheme = ThemeData.dark().copyWith(
     ),
   ),
   appBarTheme: const AppBarTheme().copyWith(
-    backgroundColor: kColorScheme.onPrimaryContainer,
-    foregroundColor: kColorScheme.primaryContainer,
+    backgroundColor: kColorScheme.primaryContainer,
+    foregroundColor: kColorScheme.onPrimaryContainer,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(

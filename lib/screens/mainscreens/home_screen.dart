@@ -54,10 +54,6 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
-        iconTheme: IconThemeData(
-          color: Theme.of(context).colorScheme.onPrimaryContainer,
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       drawer: LeftDrawer(),
       body: FutureBuilder<Map<String, List<Movie>>>(
