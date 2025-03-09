@@ -85,10 +85,10 @@ class Gravatar {
 }
 
 class Tmdb {
-  String avatarPath;
+  String? avatarPath;
 
   Tmdb({
-    required this.avatarPath,
+    this.avatarPath,
   });
 
   factory Tmdb.fromJson(Map<String, dynamic> json) => Tmdb(

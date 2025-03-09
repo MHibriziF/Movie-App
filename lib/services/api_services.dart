@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:hive/hive.dart';
+import 'package:movie_app/models/account.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_details.dart';
 import '../env.dart';
@@ -90,9 +91,25 @@ class ApiServices {
     return convertResponseToMovieList(response);
   }
 
-  // static Future<Account> getAccountDetails async {
-  //   final uri = Uri.https(authority)
-  // }
+  static Future<Account> getAccountDetails() async {
+    var box = Hive.box('authBox');
+    final uri = Uri.https(
+      Env.baseUrl,
+      '/3/account',
+      {
+        'api_key': Env.apiKey,
+        'session_id': box.get('session_id'),
+      },
+    );
+    final response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return Account.fromJson(data);
+    } else {
+      throw Exception("Failed to load data");
+    }
+  }
 
   static Future<int> updateFavorites(Map<String, dynamic> requestBody) async {
     var box = Hive.box('authBox');
