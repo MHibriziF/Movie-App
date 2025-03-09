@@ -60,7 +60,7 @@ class _MovieListState extends State<MovieList> {
                 watchBox.put(movies[ind].id, true);
               }
               double height = MediaQuery.of(context).size.height * 0.4;
-              return GestureDetector(
+              return InkWell(
                 onTap: () async {
                   // Wait for the user to return from detail page
                   await Navigator.push(

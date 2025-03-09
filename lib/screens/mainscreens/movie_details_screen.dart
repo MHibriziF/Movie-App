@@ -100,7 +100,9 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                         Text(
                           "Overview:",
                           style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Text(
