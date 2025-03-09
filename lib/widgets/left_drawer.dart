@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_list_screen.dart';
 import 'package:movie_app/screens/startscreens/starting_page.dart';
 import 'package:movie_app/services/api_services.dart';
@@ -16,6 +17,20 @@ class LeftDrawer extends StatelessWidget {
       (route) => false,
     );
     Authentication.deleteSession();
+  }
+
+  void toMovieList(
+      BuildContext context, String title, Future<List<Movie>> Function() func) {
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieList(
+          title: title,
+          loadMovies: func,
+        ),
+      ),
+    );
   }
 
   @override
@@ -47,34 +62,14 @@ class LeftDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.favorite),
             title: const Text('Favorites'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MovieList(
-                    title: "Favorites",
-                    loadMovies: ApiServices.getFavorites,
-                  ),
-                ),
-              );
-            },
+            onTap: () =>
+                toMovieList(context, "Favorites", ApiServices.getFavorites),
           ),
           ListTile(
             leading: const Icon(Icons.movie_creation_sharp),
             title: const Text('Watchlist'),
-            onTap: () {
-              Navigator.of(context).pop();
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => MovieList(
-                    title: "Watchlist",
-                    loadMovies: ApiServices.getWatchList,
-                  ),
-                ),
-              );
-            },
+            onTap: () =>
+                toMovieList(context, "Watchlist", ApiServices.getWatchList),
           ),
           ListTile(
             leading: const Icon(Icons.exit_to_app),
