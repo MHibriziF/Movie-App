@@ -5,9 +5,7 @@ import 'package:movie_app/screens/mainscreens/profile_screen.dart';
 import 'package:movie_app/screens/mainscreens/search.dart';
 
 class MainPage extends StatefulWidget {
-  const MainPage({super.key, required this.title});
-
-  final String title;
+  const MainPage({super.key});
 
   @override
   State<MainPage> createState() => _MainPageState();

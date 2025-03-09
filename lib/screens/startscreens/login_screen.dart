@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/screens/mainscreens/main_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/popup.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => MainPage(title: "Homepage"),
+            builder: (context) => MainPage(),
           ),
           (route) => false,
         );

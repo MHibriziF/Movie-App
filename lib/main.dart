@@ -46,9 +46,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Movie App',
       theme: kTheme,
-      home: isLoggedIn
-          ? const MainPage(title: "Tes")
-          : const StartingPage(title: "StartingPage"),
+      home: isLoggedIn ? const MainPage() : const StartingPage(),
     );
   }
 }

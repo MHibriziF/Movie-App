@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/screens/startscreens/starting_page.dart';
+import 'package:movie_app/services/authentication_services.dart';
+import 'package:movie_app/widgets/popup.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
+
+  void logout(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => StartingPage(),
+      ),
+      (route) => false,
+    );
+    Authentication.deleteSession();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +51,20 @@ class LeftDrawer extends StatelessWidget {
               //     MaterialPageRoute(
               //       builder: (context) => MyHomePage(),
               //     ));
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Logout'),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => Popup(
+                  title: "Confirm Exit",
+                  content: "Are you sure you want to logout?",
+                  onOk: () => logout(context),
+                ),
+              );
             },
           )
         ],

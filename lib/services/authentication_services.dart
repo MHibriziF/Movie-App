@@ -116,13 +116,15 @@ class Authentication {
     }
   }
 
-  static Future<bool> deleteSession(String sessionId) async {
+  static Future<bool> deleteSession() async {
+    var authBox = Hive.box('authBox');
+
     final uri = Uri.https(
       Env.baseUrl,
       "/3/authentication/session",
       {
         'api_key': Env.apiKey,
-        'session_id': sessionId,
+        'session_id': authBox.get('session_id'),
       },
     );
     final response = await http.delete(uri);
@@ -130,10 +132,10 @@ class Authentication {
 
     if (data['success']) {
       // Delete session ID and other user datas in Hive
-      var box = Hive.box('authBox');
+
       var favBox = Hive.box('favoritesBox');
       var watchlistBox = Hive.box('watchlistBox');
-      await box.delete('session_id');
+      await authBox.delete('session_id');
       await favBox.clear();
       await watchlistBox.clear();
 

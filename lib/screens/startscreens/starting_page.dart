@@ -6,9 +6,7 @@ import 'package:movie_app/widgets/fullscreen_carousel.dart';
 import 'package:movie_app/widgets/popup.dart';
 
 class StartingPage extends StatelessWidget {
-  const StartingPage({super.key, required this.title});
-
-  final String title;
+  const StartingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
