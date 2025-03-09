@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_details.dart';
 import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/popup.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({super.key, required this.movie});
@@ -12,8 +14,48 @@ class MovieDetailsScreen extends StatefulWidget {
 }
 
 class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
+  bool isFavorite = false;
+  bool isWatchlist = false;
+
+  void handleFavorites(bool isFavorite) async {
+    if (!isFavorite) {
+      int responseCode = await ApiServices.updateFavorites({
+        "media_type": "movie",
+        "media_id": widget.movie.id,
+        "favorite": true,
+      });
+      if (responseCode == 201) {
+        var favBox = Hive.box('favoritesBox');
+        favBox.put(widget.movie.id, true);
+        setState(() {
+          isFavorite = favBox.get(widget.movie.id) != null;
+        });
+      }
+    } else {
+      int responseCode = await ApiServices.updateFavorites({
+        "media_type": "movie",
+        "media_id": widget.movie.id,
+        "favorite": false,
+      });
+      if (responseCode == 200) {
+        var favBox = Hive.box('favoritesBox');
+        favBox.delete(widget.movie.id);
+        setState(() {
+          isFavorite = favBox.get(widget.movie.id) != null;
+        });
+      }
+    }
+  }
+
+  void addWatchlist() {}
+
   @override
   Widget build(BuildContext context) {
+    var favBox = Hive.box('favoritesBox');
+    var watchlistBox = Hive.box('watchlistBox');
+    isFavorite = favBox.get(widget.movie.id) != null;
+    isWatchlist = watchlistBox.get(widget.movie.id) != null;
+
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -27,6 +69,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        actions: [
+          IconButton(
+            onPressed: () => handleFavorites(isFavorite),
+            icon:
+                isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: ApiServices.getMovieDetails(widget.movie.id),
@@ -47,12 +96,23 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          movie.title,
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            Text(
+                              movie.title,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Spacer(),
+                            CircleAvatar(
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.movie_creation_sharp),
+                              ),
+                            )
+                          ],
                         ),
                         const SizedBox(height: 10),
                         MovieRatings(movie: movie),

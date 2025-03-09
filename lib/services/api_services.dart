@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_details.dart';
 import '../env.dart';
@@ -85,6 +86,46 @@ class ApiServices {
       {'api_key': Env.apiKey, 'query': movieName},
     );
 
+    final response = await http.get(uri);
+    return convertResponseToMovieList(response);
+  }
+
+  // static Future<Account> getAccountDetails async {
+  //   final uri = Uri.https(authority)
+  // }
+
+  static Future<int> updateFavorites(Map<String, dynamic> requestBody) async {
+    var box = Hive.box('authBox');
+
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/account/1/favorite",
+      {
+        'api_key': Env.apiKey,
+        'session_id': box.get('session_id'),
+      },
+    );
+
+    final response = await http.post(
+      uri,
+      body: json.encode(requestBody),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    return response.statusCode;
+  }
+
+  static Future<List<Movie>> getFavorites() async {
+    var box = Hive.box('authBox');
+
+    final uri = Uri.https(
+      Env.baseUrl,
+      '/3/account/1/favorite/movies',
+      {
+        'api_key': Env.apiKey,
+        'session_id': box.get('session_id'),
+      },
+    );
     final response = await http.get(uri);
     return convertResponseToMovieList(response);
   }

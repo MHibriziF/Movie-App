@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:movie_app/models/account.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/left_drawer.dart';
 import 'package:movie_app/widgets/row_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -11,6 +14,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  void loadUserDatas() async {
+    var favBox = await Hive.openBox("favoritesBox");
+    var watchBox = await Hive.openBox("watchlistBox");
+
+    final List<Movie> favoriteMovies = await ApiServices.getFavorites();
+    for (var movie in favoriteMovies) {
+      favBox.put(movie.id, true);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadUserDatas();
+  }
+
   Future<Map<String, List<Movie>>> getBrowsingMovies() async {
     final nowPlaying = await ApiServices.getNowPlaying(1);
     final popular = await ApiServices.getPopular(1);
@@ -31,8 +50,12 @@ class _HomeScreenState extends State<HomeScreen> {
           style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer),
         ),
+        iconTheme: IconThemeData(
+          color: Theme.of(context).colorScheme.onPrimaryContainer,
+        ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
+      drawer: LeftDrawer(),
       body: FutureBuilder<Map<String, List<Movie>>>(
         future: getBrowsingMovies(),
         builder: (context, snapshot) {
