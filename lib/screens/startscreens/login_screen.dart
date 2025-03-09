@@ -40,11 +40,18 @@ class _LoginScreenState extends State<LoginScreen> {
         'password': password,
         'request_token': request.requestToken,
       });
-      var session = await Authentication.createSession({
+      await Authentication.createSession({
         'request_token': response.requestToken,
       });
-      print(session);
+
       if (context.mounted) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text("Welcome to MovieApp!"),
+            ),
+          );
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
             builder: (context) => MainPage(),

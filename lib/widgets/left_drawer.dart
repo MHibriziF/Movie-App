@@ -16,9 +16,9 @@ class LeftDrawer extends StatelessWidget {
         children: [
           DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.primaryContainer,
             ),
-            child: const Column(
+            child: Column(
               children: [
                 Text(
                   'MovieApp',
@@ -26,11 +26,15 @@ class LeftDrawer extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
                 Padding(padding: EdgeInsets.all(8)),
                 Text(
-                  "Track and get the informations on your favorite movies! ",
+                  "Track and get informations of your favorite movies! ",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  ),
                 ),
               ],
             ),
@@ -74,6 +78,13 @@ class LeftDrawer extends StatelessWidget {
       (route) => false,
     );
     Authentication.deleteSession();
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text("Succesfully logged out."),
+        ),
+      );
   }
 
   void toMovieList(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_details_screen.dart';
 import 'package:movie_app/widgets/movie_backdrop.dart';
@@ -18,7 +19,7 @@ class MovieList extends StatefulWidget {
 }
 
 class _MovieListState extends State<MovieList> {
-  late Future<List<Movie>> _favoritesFuture;
+  late Future<List<Movie>> _movieListFuture;
 
   @override
   void initState() {
@@ -28,7 +29,7 @@ class _MovieListState extends State<MovieList> {
 
   void _loadMovies() {
     setState(() {
-      _favoritesFuture = widget.loadMovies();
+      _movieListFuture = widget.loadMovies();
     });
   }
 
@@ -37,7 +38,7 @@ class _MovieListState extends State<MovieList> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
       body: FutureBuilder<List<Movie>>(
-        future: _favoritesFuture,
+        future: _movieListFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,6 +52,13 @@ class _MovieListState extends State<MovieList> {
           return ListView.builder(
             itemCount: movies.length,
             itemBuilder: (context, ind) {
+              if (widget.title == 'Favorites') {
+                var favBox = Hive.box("favoritesBox");
+                favBox.put(movies[ind].id, true);
+              } else if (widget.title == 'Watchlist') {
+                var watchBox = Hive.box("watchlistBox");
+                watchBox.put(movies[ind].id, true);
+              }
               double height = MediaQuery.of(context).size.height * 0.4;
               return GestureDetector(
                 onTap: () async {
