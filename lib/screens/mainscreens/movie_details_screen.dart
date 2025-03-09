@@ -127,16 +127,17 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
       addToWatchlist();
     } else {
       showDialog(
-          context: context,
-          builder: (context) => Popup(
-                title: "Remove from watchlist?",
-                content:
-                    "Are you sure you want to remove this movie from your watchlist?",
-                onOk: () {
-                  Navigator.of(context).pop();
-                  removeFromWatchlist();
-                },
-              ));
+        context: context,
+        builder: (context) => Popup(
+          title: "Remove from watchlist?",
+          content:
+              "Are you sure you want to remove this movie from your watchlist?",
+          onOk: () {
+            Navigator.of(context).pop();
+            removeFromWatchlist();
+          },
+        ),
+      );
     }
   }
 

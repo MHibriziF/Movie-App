@@ -135,7 +135,7 @@ class Authentication {
 
       var favBox = Hive.box('favoritesBox');
       var watchlistBox = Hive.box('watchlistBox');
-      await authBox.delete('session_id');
+      await authBox.clear();
       await favBox.clear();
       await watchlistBox.clear();
 
