@@ -9,30 +9,6 @@ import 'package:movie_app/widgets/popup.dart';
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
 
-  void logout(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(
-        builder: (context) => StartingPage(),
-      ),
-      (route) => false,
-    );
-    Authentication.deleteSession();
-  }
-
-  void toMovieList(
-      BuildContext context, String title, Future<List<Movie>> Function() func) {
-    Navigator.of(context).pop();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MovieList(
-          title: title,
-          loadMovies: func,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -86,6 +62,30 @@ class LeftDrawer extends StatelessWidget {
             },
           )
         ],
+      ),
+    );
+  }
+
+  void logout(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => StartingPage(),
+      ),
+      (route) => false,
+    );
+    Authentication.deleteSession();
+  }
+
+  void toMovieList(
+      BuildContext context, String title, Future<List<Movie>> Function() func) {
+    Navigator.of(context).pop();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieList(
+          title: title,
+          loadMovies: func,
+        ),
       ),
     );
   }

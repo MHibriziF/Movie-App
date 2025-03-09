@@ -13,6 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    loadUserDatas();
+  }
+
   void loadUserDatas() async {
     var favBox = await Hive.openBox("favoritesBox");
     var watchBox = await Hive.openBox("watchlistBox");
@@ -26,12 +32,6 @@ class _HomeScreenState extends State<HomeScreen> {
     for (var movie in watchlist) {
       watchBox.put(movie.id, true);
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    loadUserDatas();
   }
 
   Future<Map<String, List<Movie>>> getBrowsingMovies() async {
