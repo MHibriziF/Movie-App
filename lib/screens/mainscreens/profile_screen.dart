@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/account.dart';
+import 'package:movie_app/screens/mainscreens/movie_list_screen.dart';
 import 'package:movie_app/services/api_services.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -75,6 +76,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       // Navigate to favorites screen
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MovieList(
+                            title: "Favorites",
+                            loadMovies: ApiServices.getFavorites,
+                          ),
+                        ),
+                      );
                     },
                   ),
                   ListTile(
@@ -83,6 +92,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       // Navigate to watchlist screen
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MovieList(
+                            title: "Watchlist",
+                            loadMovies: ApiServices.getWatchList,
+                          ),
+                        ),
+                      );
                     },
                   ),
                 ],

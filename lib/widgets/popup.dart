@@ -29,9 +29,13 @@ class Popup extends StatelessWidget {
       ),
       actions: [
         TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text("Cancel"),
+        ),
+        TextButton(
           onPressed: onOk,
           child: const Text("OK"),
-        ),
+        )
       ],
     );
   }

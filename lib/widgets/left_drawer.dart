@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/screens/mainscreens/movie_list_screen.dart';
 import 'package:movie_app/screens/startscreens/starting_page.dart';
+import 'package:movie_app/services/api_services.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/popup.dart';
 
@@ -46,11 +48,32 @@ class LeftDrawer extends StatelessWidget {
             leading: const Icon(Icons.favorite),
             title: const Text('Favorites'),
             onTap: () {
-              // Navigator.pushReplacement(
-              //     context,
-              //     MaterialPageRoute(
-              //       builder: (context) => MyHomePage(),
-              //     ));
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MovieList(
+                    title: "Favorites",
+                    loadMovies: ApiServices.getFavorites,
+                  ),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.movie_creation_sharp),
+            title: const Text('Watchlist'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => MovieList(
+                    title: "Watchlist",
+                    loadMovies: ApiServices.getWatchList,
+                  ),
+                ),
+              );
             },
           ),
           ListTile(

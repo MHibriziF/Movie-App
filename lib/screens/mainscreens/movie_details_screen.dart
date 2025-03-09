@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/movie_details.dart';
 import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/popup.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
   const MovieDetailsScreen({super.key, required this.movie});
@@ -18,61 +19,97 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   void handleWatchlist(bool isWatchlist) async {
     if (!isWatchlist) {
-      int responseCode = await ApiServices.updateWatchlist({
-        "media_type": "movie",
-        "media_id": widget.movie.id,
-        "watchlist": true,
-      });
-      if (responseCode == 201) {
-        var watchBox = Hive.box('watchlistBox');
-        watchBox.put(widget.movie.id, true);
-        setState(() {
-          isWatchlist = watchBox.get(widget.movie.id) != null;
-        });
-      }
+      addToWatchlist();
     } else {
-      int responseCode = await ApiServices.updateWatchlist({
-        "media_type": "movie",
-        "media_id": widget.movie.id,
-        "watchlist": false,
+      showDialog(
+          context: context,
+          builder: (context) => Popup(
+                title: "Remove from watchlist?",
+                content:
+                    "Are you sure you want to remove this movie from your watchlist?",
+                onOk: () {
+                  Navigator.of(context).pop();
+                  removeFromWatchlist();
+                },
+              ));
+    }
+  }
+
+  void addToWatchlist() async {
+    int responseCode = await ApiServices.updateWatchlist({
+      "media_type": "movie",
+      "media_id": widget.movie.id,
+      "watchlist": true,
+    });
+    if (responseCode == 201) {
+      var watchBox = Hive.box('watchlistBox');
+      watchBox.put(widget.movie.id, true);
+      setState(() {
+        isWatchlist = watchBox.get(widget.movie.id) != null;
       });
-      if (responseCode == 200) {
-        var watchBox = Hive.box('watchlistBox');
-        watchBox.delete(widget.movie.id);
-        setState(() {
-          isWatchlist = watchBox.get(widget.movie.id) != null;
-        });
-      }
+    }
+  }
+
+  void removeFromWatchlist() async {
+    int responseCode = await ApiServices.updateWatchlist({
+      "media_type": "movie",
+      "media_id": widget.movie.id,
+      "watchlist": false,
+    });
+    if (responseCode == 200) {
+      var watchBox = Hive.box('watchlistBox');
+      watchBox.delete(widget.movie.id);
+      setState(() {
+        isWatchlist = watchBox.get(widget.movie.id) != null;
+      });
     }
   }
 
   void handleFavorites(bool isFavorite) async {
     if (!isFavorite) {
-      int responseCode = await ApiServices.updateFavorites({
-        "media_type": "movie",
-        "media_id": widget.movie.id,
-        "favorite": true,
-      });
-      if (responseCode == 201) {
-        var favBox = Hive.box('favoritesBox');
-        favBox.put(widget.movie.id, true);
-        setState(() {
-          isFavorite = favBox.get(widget.movie.id) != null;
-        });
-      }
+      addToFavorites();
     } else {
-      int responseCode = await ApiServices.updateFavorites({
-        "media_type": "movie",
-        "media_id": widget.movie.id,
-        "favorite": false,
+      showDialog(
+          context: context,
+          builder: (context) => Popup(
+                title: "Remove from favorites?",
+                content:
+                    "Are you sure you want to remove this movie from your favorites?",
+                onOk: () {
+                  Navigator.of(context).pop();
+                  removeFromFavorites();
+                },
+              ));
+    }
+  }
+
+  void addToFavorites() async {
+    int responseCode = await ApiServices.updateFavorites({
+      "media_type": "movie",
+      "media_id": widget.movie.id,
+      "favorite": true,
+    });
+    if (responseCode == 201) {
+      var favBox = Hive.box('favoritesBox');
+      favBox.put(widget.movie.id, true);
+      setState(() {
+        isFavorite = favBox.get(widget.movie.id) != null;
       });
-      if (responseCode == 200) {
-        var favBox = Hive.box('favoritesBox');
-        favBox.delete(widget.movie.id);
-        setState(() {
-          isFavorite = favBox.get(widget.movie.id) != null;
-        });
-      }
+    }
+  }
+
+  void removeFromFavorites() async {
+    int responseCode = await ApiServices.updateFavorites({
+      "media_type": "movie",
+      "media_id": widget.movie.id,
+      "favorite": false,
+    });
+    if (responseCode == 200) {
+      var favBox = Hive.box('favoritesBox');
+      favBox.delete(widget.movie.id);
+      setState(() {
+        isFavorite = favBox.get(widget.movie.id) != null;
+      });
     }
   }
 
