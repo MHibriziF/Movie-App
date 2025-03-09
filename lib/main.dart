@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:movie_app/screens/homepage_screen.dart';
-import 'screens/starting_page.dart';
+import 'package:movie_app/screens/mainscreens/main_screen.dart';
+import 'screens/startscreens/starting_page.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 final kColorScheme = ColorScheme.fromSeed(
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
       title: 'Movie App',
       theme: kTheme,
       home: isLoggedIn
-          ? const HomePage(title: "Tes")
+          ? const MainPage(title: "Tes")
           : const StartingPage(title: "StartingPage"),
     );
   }

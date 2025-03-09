@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/screens/login_screen.dart';
+import 'package:movie_app/screens/startscreens/login_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/buttons.dart';
 import 'package:movie_app/widgets/fullscreen_carousel.dart';

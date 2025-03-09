@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:movie_app/screens/homepage_screen.dart';
+import 'package:movie_app/screens/mainscreens/main_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/popup.dart';
 
@@ -47,7 +47,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => HomePage(title: "Homepage"),
+            builder: (context) => MainPage(title: "Homepage"),
           ),
           (route) => false,
         );

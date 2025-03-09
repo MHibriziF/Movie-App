@@ -4,6 +4,27 @@ import '../env.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServices {
+  static List<Movie> convertResponseToMovieList(http.Response response) {
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body)['results'];
+
+      List<Movie> movies = [];
+      for (final movie in data) {
+        try {
+          movies.add(Movie.fromJson(movie));
+        } catch (e) {
+          continue;
+        }
+      }
+      for (final movie in movies) {
+        print(movie.title);
+      }
+      return movies;
+    } else {
+      throw Exception("Failed to load data");
+    }
+  }
+
   static Future<List<Movie>> getNowPlaying(int page) async {
     final uri = Uri.https(
       Env.baseUrl,
@@ -14,14 +35,33 @@ class ApiServices {
       },
     );
     final response = await http.get(uri);
+    return convertResponseToMovieList(response);
+  }
 
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body)['results'];
-      List<Movie> movies = data.map((movie) => Movie.fromJson(movie)).toList();
-      return movies;
-    } else {
-      throw Exception("Failed to load data");
-    }
+  static Future<List<Movie>> getPopular(int page) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/movie/popular",
+      {
+        'api_key': Env.apiKey,
+        'page': page.toString(),
+      },
+    );
+    final response = await http.get(uri);
+    return convertResponseToMovieList(response);
+  }
+
+  static Future<List<Movie>> getTopRated(int page) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/movie/top_rated",
+      {
+        'api_key': Env.apiKey,
+        'page': page.toString(),
+      },
+    );
+    final response = await http.get(uri);
+    return convertResponseToMovieList(response);
   }
 
   static Future<List<Movie>> searchMovie(String movieName) async {
@@ -32,13 +72,6 @@ class ApiServices {
     );
 
     final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      final data = json.decode(response.body);
-      List<Movie> movies = data.map((movie) => Movie.fromJson(movie)).toList();
-      return movies;
-    } else {
-      throw Exception('Failed to load data');
-    }
+    return convertResponseToMovieList(response);
   }
 }
