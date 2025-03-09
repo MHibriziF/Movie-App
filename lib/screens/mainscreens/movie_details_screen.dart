@@ -262,6 +262,7 @@ class MovieGenres extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 8,
+      runSpacing: 8,
       children: movie.genres.map((genre) {
         return Chip(
           backgroundColor: Theme.of(context).colorScheme.primaryContainer,

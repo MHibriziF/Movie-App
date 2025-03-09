@@ -43,6 +43,11 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
           ),
         ),
+        actions: [
+          IconButton(
+              onPressed: () => _searchController.clear(),
+              icon: Icon(Icons.close))
+        ],
       ),
       body: FutureBuilder(
         future: ApiServices.searchMovie(_searchController.text),
