@@ -27,8 +27,7 @@ class RowCarousel extends StatelessWidget {
       items: movieList
           .map(
             (movie) => MovieBackdrop(
-              path: movie.backDropPath,
-              movieTitle: movie.title,
+              movie: movie,
             ),
           )
           .toList(),

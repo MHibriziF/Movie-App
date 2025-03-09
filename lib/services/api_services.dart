@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:movie_app/models/movie.dart';
+import 'package:movie_app/models/movie_details.dart';
 import '../env.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +17,23 @@ class ApiServices {
         }
       }
       return movies;
+    } else {
+      throw Exception("Failed to load data");
+    }
+  }
+
+  static Future<MovieDetails> getMovieDetails(int id) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/movie/$id",
+      {
+        'api_key': Env.apiKey,
+      },
+    );
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      return MovieDetails.fromJson(data);
     } else {
       throw Exception("Failed to load data");
     }
