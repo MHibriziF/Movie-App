@@ -82,7 +82,7 @@ class ApiServices {
 
   static Future<List<Movie>> searchMovie(String movieName) async {
     final uri = Uri.https(
-      'api.themoviedb.org',
+      Env.baseUrl,
       '/3/search/movie',
       {'api_key': Env.apiKey, 'query': movieName},
     );
