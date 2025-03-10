@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_details_screen.dart';
-import 'package:movie_app/widgets/movie_backdrop.dart';
+import 'package:movie_app/widgets/movies/movie_backdrop.dart';
 
 class MovieList extends StatefulWidget {
   const MovieList({

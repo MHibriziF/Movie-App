@@ -93,19 +93,8 @@ class ApiServices {
     return convertResponseToMovieList(response);
   }
 
-  static Future<Map<String, dynamic>> getMoviesByGenres(
-      String genres, int page) async {
-    final uri = Uri.https(
-      Env.baseUrl,
-      "/3/discover/movie",
-      {
-        'api_key': Env.apiKey,
-        'with_genres': genres,
-        'page': page.toString(),
-      },
-    );
-
-    final response = await http.get(uri);
+  static Future<Map<String, dynamic>> convertToMap(
+      http.Response response) async {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final totalPages = data['total_pages'];
@@ -127,15 +116,36 @@ class ApiServices {
     }
   }
 
-  static Future<List<Movie>> searchMovie(String movieName) async {
+  static Future<Map<String, dynamic>> getMoviesByGenres(
+      String genres, int page) async {
     final uri = Uri.https(
       Env.baseUrl,
-      '/3/search/movie',
-      {'api_key': Env.apiKey, 'query': movieName},
+      "/3/discover/movie",
+      {
+        'api_key': Env.apiKey,
+        'with_genres': genres,
+        'page': page.toString(),
+      },
     );
 
     final response = await http.get(uri);
-    return convertResponseToMovieList(response);
+    return convertToMap(response);
+  }
+
+  static Future<Map<String, dynamic>> searchMovie(
+      String movieName, int page) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      '/3/search/movie',
+      {
+        'api_key': Env.apiKey,
+        'query': movieName,
+        'page': page.toString(),
+      },
+    );
+
+    final response = await http.get(uri);
+    return convertToMap(response);
   }
 
   static Future<Account> getAccountDetails() async {

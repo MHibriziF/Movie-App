@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
-import 'package:movie_app/models/movie_details.dart';
 import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/movies/movie_details_picture.dart';
+import 'package:movie_app/widgets/movies/movie_genres.dart';
+import 'package:movie_app/widgets/movies/movie_ratings.dart';
 import 'package:movie_app/widgets/popup.dart';
 
 class MovieDetailsScreen extends StatefulWidget {
@@ -217,106 +219,5 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         isFavorite = favBox.get(widget.movie.id) != null;
       });
     }
-  }
-}
-
-class MovieRatings extends StatelessWidget {
-  const MovieRatings({
-    super.key,
-    required this.movie,
-  });
-
-  final MovieDetails movie;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.star, color: Colors.amber, size: 20),
-        const SizedBox(width: 5),
-        Text(
-          movie.voteAverage.toStringAsFixed(1),
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(width: 10),
-        Text(
-          '(${movie.voteCount} votes)',
-          style: TextStyle(fontSize: 14, color: Colors.grey),
-        ),
-      ],
-    );
-  }
-}
-
-class MovieGenres extends StatelessWidget {
-  const MovieGenres({
-    super.key,
-    required this.movie,
-  });
-
-  final MovieDetails movie;
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      runSpacing: 8,
-      children: movie.genres.map((genre) {
-        return Chip(
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          label: Text(
-            genre.name,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.onPrimaryContainer),
-          ),
-        );
-      }).toList(),
-    );
-  }
-}
-
-class MovieDetailsPicture extends StatelessWidget {
-  const MovieDetailsPicture({
-    super.key,
-    required this.widget,
-  });
-
-  final MovieDetailsScreen widget;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Hero(
-          tag: widget.movie,
-          child: Image.network(
-            "https://image.tmdb.org/t/p/w500${widget.movie.backDropPath}",
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 150, // Adjust height of the gradient
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [
-                  Theme.of(context).scaffoldBackgroundColor,
-                  const Color.fromARGB(0, 0, 0, 0),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
   }
 }

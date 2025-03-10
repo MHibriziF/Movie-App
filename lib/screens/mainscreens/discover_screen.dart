@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_details_screen.dart';
 import 'package:movie_app/services/api_services.dart';
+import 'package:movie_app/widgets/movies/movie_tiles.dart';
 
 enum MovieGenre {
   action(28, "Action"),
@@ -151,12 +152,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                           children: [
                             if (currentPage != 1)
                               CircleAvatar(
-                                backgroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .primaryContainer,
-                                foregroundColor: Theme.of(context)
-                                    .colorScheme
-                                    .onPrimaryContainer,
                                 child: IconButton(
                                   onPressed: _previousPage,
                                   icon: Icon(Icons.navigate_before),
@@ -181,28 +176,6 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-class MovieTiles extends StatelessWidget {
-  const MovieTiles({super.key, required this.movie});
-
-  final Movie movie;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: ListTile(
-        leading: Image.network(
-          "https://image.tmdb.org/t/p/w200${movie.backDropPath}",
-          fit: BoxFit.cover,
-          width: 80,
-          height: 100,
-        ),
-        title: Text(movie.title),
       ),
     );
   }

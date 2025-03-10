@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_details_screen.dart';
-import 'package:movie_app/widgets/movie_backdrop.dart';
+import 'package:movie_app/widgets/movies/movie_backdrop.dart';
 
 class RowCarousel extends StatelessWidget {
   const RowCarousel({
