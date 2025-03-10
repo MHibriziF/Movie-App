@@ -49,11 +49,11 @@ git clone https://github.com/MHibriziF/Movie-App.git
 ```
 
 2. Run `flutter pub get`from the project terminal
-3. Create a new `.env` file located at the root of the project. The content of the `.env` file should look like this
+3. Create a new `.env` file located at the root of the project. The content of the `.env` file should look like this. Note that BASE_URL does not include the `https://`
 
 ```
-api_key=TMDB_API_KEY
-base_url=TMDB_API_BASE_URL
+API_KEY=TMDB_API_KEY
+BASE_URL=TMDB_API_BASE_URL
 ```
 
 4. Run `dart run build_runner build`to generate the Env class
