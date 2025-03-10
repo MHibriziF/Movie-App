@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_list_screen.dart';
+import 'package:movie_app/screens/startscreens/login_screen.dart';
 import 'package:movie_app/screens/startscreens/starting_page.dart';
 import 'package:movie_app/services/api_services.dart';
 import 'package:movie_app/services/authentication_services.dart';
@@ -11,6 +13,9 @@ class LeftDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var authBox = Hive.box("authBox");
+    bool isLoggedIn = authBox.get('session_id') != null;
+
     return Drawer(
       child: ListView(
         children: [
@@ -39,32 +44,45 @@ class LeftDrawer extends StatelessWidget {
               ],
             ),
           ),
-          ListTile(
-            leading: const Icon(Icons.favorite),
-            title: const Text('Favorites'),
-            onTap: () =>
-                toMovieList(context, "Favorites", ApiServices.getFavorites),
-          ),
-          ListTile(
-            leading: const Icon(Icons.movie_creation_sharp),
-            title: const Text('Watchlist'),
-            onTap: () =>
-                toMovieList(context, "Watchlist", ApiServices.getWatchList),
-          ),
-          ListTile(
-            leading: const Icon(Icons.exit_to_app),
-            title: const Text('Logout'),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => Popup(
-                  title: "Confirm Exit",
-                  content: "Are you sure you want to logout?",
-                  onOk: () => logout(context),
+          if (isLoggedIn)
+            ListTile(
+              leading: const Icon(Icons.favorite),
+              title: const Text('Favorites'),
+              onTap: () =>
+                  toMovieList(context, "Favorites", ApiServices.getFavorites),
+            ),
+          if (isLoggedIn)
+            ListTile(
+              leading: const Icon(Icons.movie_creation_sharp),
+              title: const Text('Watchlist'),
+              onTap: () =>
+                  toMovieList(context, "Watchlist", ApiServices.getWatchList),
+            ),
+          if (isLoggedIn)
+            ListTile(
+              leading: const Icon(Icons.logout),
+              title: const Text('Logout'),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => Popup(
+                    title: "Confirm Exit",
+                    content: "Are you sure you want to logout?",
+                    onOk: () => logout(context),
+                  ),
+                );
+              },
+            ),
+          if (!isLoggedIn)
+            ListTile(
+              leading: const Icon(Icons.login),
+              title: const Text('Login'),
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => LoginScreen(),
                 ),
-              );
-            },
-          )
+              ),
+            ),
         ],
       ),
     );

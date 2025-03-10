@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movie_app/screens/mainscreens/main_screen.dart';
 import 'package:movie_app/screens/startscreens/login_screen.dart';
 import 'package:movie_app/services/authentication_services.dart';
 import 'package:movie_app/widgets/buttons.dart';
@@ -65,6 +66,20 @@ class StartingPage extends StatelessWidget {
                       ),
                       icon: Icons.person_2_outlined,
                     ),
+                    const SizedBox(height: 25),
+                    TextButton(
+                      onPressed: () => Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => MainPage(),
+                        ),
+                      ),
+                      child: Text(
+                        "Continue as guest.",
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),

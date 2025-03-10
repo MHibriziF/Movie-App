@@ -108,6 +108,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     'Please enter your username',
                   ),
                 ),
+                SizedBox(height: 10),
                 TextFormField(
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.secondary,
@@ -132,6 +133,27 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                   child: const Text("Login"),
+                ),
+                SizedBox(height: 30),
+                TextButton(
+                  onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) => Popup(
+                      title: "Redirecting to TMDB Registration",
+                      content:
+                          "TMDB does not allow users to register through third-party apps. You will be redirected to their registration page—please return here once you have completed the process",
+                      onOk: () {
+                        Navigator.pop(context);
+                        Authentication.register();
+                      },
+                    ),
+                  ),
+                  child: Text(
+                    "Don't have a TMDB account? Register now.",
+                    style: TextStyle(
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
                 ),
               ],
             ),

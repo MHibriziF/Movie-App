@@ -21,10 +21,14 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var favBox = Hive.box('favoritesBox');
-    var watchlistBox = Hive.box('watchlistBox');
-    isFavorite = favBox.get(widget.movie.id) != null;
-    isWatchlist = watchlistBox.get(widget.movie.id) != null;
+    var authBox = Hive.box("authBox");
+    bool isLoggedIn = authBox.get('session_id') != null;
+    if (isLoggedIn) {
+      var favBox = Hive.box('favoritesBox');
+      var watchlistBox = Hive.box('watchlistBox');
+      isFavorite = favBox.get(widget.movie.id) != null;
+      isWatchlist = watchlistBox.get(widget.movie.id) != null;
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -40,11 +44,13 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
         ),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
         actions: [
-          IconButton(
-            onPressed: () => handleFavorites(isFavorite),
-            icon:
-                isFavorite ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
-          ),
+          if (isLoggedIn)
+            IconButton(
+              onPressed: () => handleFavorites(isFavorite),
+              icon: isFavorite
+                  ? Icon(Icons.favorite)
+                  : Icon(Icons.favorite_border),
+            ),
         ],
       ),
       body: FutureBuilder(
@@ -78,14 +84,15 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
                           children: [
                             MovieRatings(movie: movie),
                             const Spacer(),
-                            CircleAvatar(
-                              child: IconButton(
-                                onPressed: () => handleWatchlist(isWatchlist),
-                                icon: isWatchlist
-                                    ? Icon(Icons.movie_creation_sharp)
-                                    : Icon(Icons.movie_creation_outlined),
+                            if (isLoggedIn)
+                              CircleAvatar(
+                                child: IconButton(
+                                  onPressed: () => handleWatchlist(isWatchlist),
+                                  icon: isWatchlist
+                                      ? Icon(Icons.movie_creation_sharp)
+                                      : Icon(Icons.movie_creation_outlined),
+                                ),
                               ),
-                            ),
                           ],
                         ),
                         const SizedBox(height: 15),

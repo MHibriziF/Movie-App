@@ -6,7 +6,9 @@ import 'package:movie_app/widgets/left_drawer.dart';
 import 'package:movie_app/widgets/row_carousel.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({
+    super.key,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -16,7 +18,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    loadUserDatas();
+    var authBox = Hive.box("authBox");
+    bool isLoggedIn = authBox.get('session_id') != null;
+    if (isLoggedIn) {
+      loadUserDatas();
+    }
   }
 
   void loadUserDatas() async {
