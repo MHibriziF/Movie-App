@@ -38,10 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final nowPlaying = await ApiServices.getNowPlaying(1);
     final popular = await ApiServices.getPopular(1);
     final topRated = await ApiServices.getTopRated(1);
+    final upcoming = await ApiServices.getUpcoming(1);
     return {
       'nowPlaying': nowPlaying,
       'popular': popular,
       'topRated': topRated,
+      'upcoming': upcoming,
     };
   }
 
@@ -97,6 +99,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   viewportFraction: 0.6,
                 ),
                 const SizedBox(height: 10),
+                MovieCategoryLabel('Upcoming'),
+                const SizedBox(height: 10),
+                RowCarousel(
+                  movieList: snapshot.data!['upcoming']!,
+                  percent: 0.25,
+                  viewportFraction: 0.6,
+                ),
               ],
             );
           }

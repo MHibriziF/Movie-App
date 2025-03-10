@@ -80,6 +80,19 @@ class ApiServices {
     return convertResponseToMovieList(response);
   }
 
+  static Future<List<Movie>> getUpcoming(int page) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/movie/upcoming",
+      {
+        'api_key': Env.apiKey,
+        'page': page.toString(),
+      },
+    );
+    final response = await http.get(uri);
+    return convertResponseToMovieList(response);
+  }
+
   static Future<List<Movie>> searchMovie(String movieName) async {
     final uri = Uri.https(
       Env.baseUrl,
