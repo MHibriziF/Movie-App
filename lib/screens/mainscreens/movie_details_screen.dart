@@ -53,7 +53,7 @@ class _MovieDetailsScreenState extends State<MovieDetailsScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error occurred'));
+            return const Center(child: Text('Details are not available'));
           } else {
             final movie = snapshot.data!;
             return SingleChildScrollView(
