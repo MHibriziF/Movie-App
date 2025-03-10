@@ -93,6 +93,40 @@ class ApiServices {
     return convertResponseToMovieList(response);
   }
 
+  static Future<Map<String, dynamic>> getMoviesByGenres(
+      String genres, int page) async {
+    final uri = Uri.https(
+      Env.baseUrl,
+      "/3/discover/movie",
+      {
+        'api_key': Env.apiKey,
+        'with_genres': genres,
+        'page': page.toString(),
+      },
+    );
+
+    final response = await http.get(uri);
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body);
+      final totalPages = data['total_pages'];
+      final List<dynamic> results = data['results'];
+      final List<Movie> movies = [];
+      for (final movie in results) {
+        try {
+          movies.add(Movie.fromJson(movie));
+        } catch (e) {
+          continue;
+        }
+      }
+      return {
+        'total_pages': totalPages,
+        'movies': movies,
+      };
+    } else {
+      throw Exception("Failed to load data");
+    }
+  }
+
   static Future<List<Movie>> searchMovie(String movieName) async {
     final uri = Uri.https(
       Env.baseUrl,
