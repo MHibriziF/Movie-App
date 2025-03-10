@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/screens/mainscreens/movie_details_screen.dart';
 import 'package:movie_app/services/api_services.dart';
-import 'package:movie_app/widgets/movies/movie_backdrop.dart';
 import 'package:movie_app/widgets/movies/movie_tiles.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -83,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error occurred'));
+            return const Center(child: Text('Details not available'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No Results.'));
           }

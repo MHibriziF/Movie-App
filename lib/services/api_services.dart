@@ -117,7 +117,7 @@ class ApiServices {
   }
 
   static Future<Map<String, dynamic>> getMoviesByGenres(
-      String genres, int page) async {
+      String genres, int page, String sortby) async {
     final uri = Uri.https(
       Env.baseUrl,
       "/3/discover/movie",
@@ -125,6 +125,7 @@ class ApiServices {
         'api_key': Env.apiKey,
         'with_genres': genres,
         'page': page.toString(),
+        'sort_by': sortby,
       },
     );
 

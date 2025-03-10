@@ -35,6 +35,18 @@ enum MovieGenre {
   }
 }
 
+enum MovieSort {
+  voteAverage("vote_average", "Vote Average"),
+  voteCount("vote_count", "Vote Count"),
+  popularity("popularity", "Popularity"),
+  title("original_title", "Title");
+
+  final String value;
+  final String name;
+
+  const MovieSort(this.value, this.name);
+}
+
 class DiscoverScreen extends StatefulWidget {
   const DiscoverScreen({super.key});
 
@@ -46,12 +58,15 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
   final List<MovieGenre> _selectedGenres = [];
   int currentPage = 1;
   int totalPages = 0;
+  MovieSort _selectedSort = MovieSort.popularity;
+  bool _isAscending = false;
 
   Future<List<Movie>> fetchMovies() async {
     if (_selectedGenres.isEmpty) return [];
     final genreIds = _selectedGenres.map((genre) => genre.id).join(",");
-    final movieDatas =
-        await ApiServices.getMoviesByGenres(genreIds, currentPage);
+    final sortOrder = _isAscending ? "asc" : "desc";
+    final movieDatas = await ApiServices.getMoviesByGenres(
+        genreIds, currentPage, "${_selectedSort.value}.$sortOrder");
 
     totalPages = movieDatas['total_pages'];
     return movieDatas['movies'];
@@ -71,6 +86,76 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
         currentPage--;
       });
     }
+  }
+
+  void _showSortDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Sort Movies",
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimaryContainer,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButton<MovieSort>(
+                value: _selectedSort,
+                onChanged: (newValue) {
+                  _selectedSort = newValue!;
+                  Navigator.of(context).pop();
+                  _showSortDialog();
+                },
+                items: MovieSort.values.map((sort) {
+                  return DropdownMenuItem(
+                    value: sort,
+                    child: Text(
+                      sort.name,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+              const SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Ascending"),
+                  StatefulBuilder(
+                    builder: (context, setState) {
+                      return Switch(
+                        value: _isAscending,
+                        onChanged: (value) {
+                          setState(() {
+                            _isAscending = value;
+                          });
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  currentPage = 1;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text("Apply"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -113,6 +198,14 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   );
                 }).toList(),
               ),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: IconButton(
+                  icon: const Icon(Icons.filter_list),
+                  onPressed: _showSortDialog,
+                ),
+              ),
               const SizedBox(height: 20),
               FutureBuilder<List<Movie>>(
                 future: fetchMovies(),
@@ -120,7 +213,7 @@ class _DiscoverScreenState extends State<DiscoverScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return const Center(child: Text('Error fetching movies'));
+                    return const Center(child: Text('Details not available'));
                   } else if (snapshot.data!.isEmpty) {
                     return const Center(child: Text('No movies found'));
                   }
